@@ -2,13 +2,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    static int pilihan;
     public static void main(String[] args) {
         ArrayList<Nasabah> daftarNasabah = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         boolean running = true;
-        boolean jalan = true;
-
         while (running) {
             System.out.println("\n--- BANK DIGITAL UT ---");
             System.out.println("1. Daftar Nasabah");
@@ -51,48 +48,42 @@ public class Main {
                     case 3:
                         // LOGIKA LOGIN & TRANSAKSI
                         // INPUT NO REK
-                        while (jalan) {
                             System.out.println("Masukan Nomor Rekening");
-                            String n = sc.next();
-                            sc.nextLine();
-                            for (Nasabah n2 : daftarNasabah) {
-                                System.out.println(n.toString());
-                            }
-                            if (daftarNasabah == null) {
-                                System.out.println("Nasabah tidak ditemukan");
+                            String inputRekening = sc.next();
+                            Nasabah akunAktif = null;
+
+                            for (Nasabah n : daftarNasabah) {
+                                if (n.getNoRekening().equals(inputRekening)) {
+                                    akunAktif = n;
+                                }
                                 break;
                             }
-                            break;
-                        }
-                        
-                        // CARI REKENING
-                        // INPUT PIN
-                        // VALIDASI PIN
-                        while (jalan) {
-                            System.out.println("\n--- Menu ---");
-                            System.out.println("1. Cek Saldo");
-                            System.out.println("2. Transfer");
-                            System.out.println("3. logOut");
-                            System.out.print("Pilih : ");
-                            int Pilihan = sc.nextInt();
-                            sc.nextLine();
+                            if (akunAktif == null) {
+                                System.out.println("Rekening tidak terdaftar");
+                                break;
+                            }else{
+                                System.out.println("Masukan PIN Anda :");
+                                String inputPin = sc.next();
+                                if (akunAktif.cekLogin(inputPin)) {
+                                    System.out.println("Login berhasil! Selamat Datang.");
+                                    boolean loginSelesai = false;
+                                    while (!loginSelesai) {
+                                        System.out.println("\n--- Menu ---");
+                                        System.out.println("1. Cek Saldo");
+                                        System.out.println("2. logOut");
+                                        System.out.println("Pilih :");
+                                        int subPilihan = sc.nextInt();
 
-                            switch (pilihan) {
-                                case 1:
-                                    System.out.println("--- Menu Saldo ---");
-                                    break;
-                                case 2:
-                                    System.out.println("--- Menu Transfer ---");
-                                    break;
-                                case 3:
-                                    jalan = false;
-                                    System.out.println("Terima kasih");
-                                    break;
-                                
-                                default:
-                                    break;
+                                        if (subPilihan == 1) {
+                                            System.out.println("Saldo Anda: Rp" + akunAktif.getSaldo());
+                                        }else{
+                                            loginSelesai = true;
+                                        }
+                                    }
+                                }else{
+                                    System.out.println("PIN SALAH");
+                                }
                             }
-                        }
                         break;
                     case 4:
                         running = false;
