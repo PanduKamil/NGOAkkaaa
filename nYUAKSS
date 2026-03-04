@@ -62,7 +62,7 @@ public class Main {
 
                             if (akunAktif == null) {
                                 System.out.println("Rekening tidak terdaftar");
-                                break;
+                                continue;
                             }
                             //---- CEK PIN -----
                             boolean loginBerhasil = false;
@@ -78,7 +78,7 @@ public class Main {
                                 }
                                 } catch (Exception e) {
                 
-                                    System.out.println("ERROR" + e.getMessage());
+                                    System.out.println("ERROR " + e.getMessage());
                                 }
                                 
                                 if (loginBerhasil) {
@@ -109,20 +109,26 @@ public class Main {
                                                 break;
                                             }
                                         }
-                                            System.out.println("Jumlah Transfer : Rp");
+                                            if (penerima == null) {
+                                                System.out.println("ERROR Rekening tujuan tidak terdaftar");
+                                                break;
+                                            }else{
+                                                System.out.println("Jumlah Transfer : Rp");
                                             int jumlah = sc.nextInt();
 
                                             try {
                                                 akunAktif.transfer(penerima, jumlah);
                                                 System.out.println("Transfer Berhasil ke " + penerima.getNoRekening());
                                             } catch (Exception e) {
-                                                System.out.println("ERROR" + e.getMessage());
+                                                System.out.println("ERROR : " + (e.getMessage() != null ? e.getMessage() : e.toString()));
                                             }
                                         
+                                            }
                                         break;
                                     case 3:
                                         logout = true;
                                         System.out.println("Logout Berhasil");
+                                        loginBerhasil = false;
                                         break;
                                 
                                     default:
