@@ -23,7 +23,7 @@ public class Main {
                         System.out.println("\n--- PENDAFTARAN NASABAH BARU ---");
                         System.out.print("Masukkan PIN (6 digit): ");
                         String pinBaru = sc.next();
-
+                        
                         System.out.print("Setoran Awal: Rp");
                         double saldoBaru = sc.nextDouble();
                         sc.nextLine(); // SAPU HANTU ENTER
@@ -66,22 +66,26 @@ public class Main {
                             }
                             //---- CEK PIN -----
                             boolean loginBerhasil = false;
-                            while (!loginBerhasil && akunAktif.getStatusBlokir()) {
+                            while (!loginBerhasil && !akunAktif.getStatusBlokir()) {
                                 System.out.println("Masukan PIN Anda :");
                                 String inputPin = sc.next();
-                                if (!akunAktif.cekLogin(inputPin)) {
-                                    loginBerhasil = true;
+                                try {
+                                    if (akunAktif.cekLogin(inputPin)) {
                                     System.out.println("Login Berhasil!");
-                                    break;
+                                    loginBerhasil = true;
+                                }else{
+                                    System.out.println("PIN SALAH");
                                 }
+                                } catch (Exception e) {
+                
+                                    System.out.println("ERROR" + e.getMessage());
+                                }
+                                
                                 if (loginBerhasil) {
                                     // MASUK SUB-MENU
-                                }
-                            }
-                            
-                            //---- SUB MENU ----
-                            boolean logout = false;
-                            while (!logout) {
+                                    //---- SUB MENU ----
+                                boolean logout = false;
+                                while (!logout) {
                                 System.out.println("\n --- MENU TRANSAKSI ---" + akunAktif.getNoRekening());
                                 System.out.println("1. Cek Saldo");
                                 System.out.println("2. Transfer");
@@ -95,9 +99,27 @@ public class Main {
                                         break;
 
                                     case 2:
+                                        System.out.println("Masukan No Rekening Tujuan :");
+                                        String rekTujuan = sc.next();
+                                        Nasabah penerima = null;
+
+                                        for (Nasabah n : daftarNasabah) {
+                                            if (n.getNoRekening().equals(rekTujuan)) {
+                                                penerima = n;
+                                                break;
+                                            }
+                                        }
+                                            System.out.println("Jumlah Transfer : Rp");
+                                            int jumlah = sc.nextInt();
+
+                                            try {
+                                                akunAktif.transfer(penerima, jumlah);
+                                                System.out.println("Transfer Berhasil ke " + penerima.getNoRekening());
+                                            } catch (Exception e) {
+                                                System.out.println("ERROR" + e.getMessage());
+                                            }
                                         
                                         break;
-
                                     case 3:
                                         logout = true;
                                         System.out.println("Logout Berhasil");
@@ -106,6 +128,8 @@ public class Main {
                                     default:
                                         System.out.println("Pilihan Salah");
                                         break;
+                                        }
+                                    }
                                 }
                             }
                         break;
