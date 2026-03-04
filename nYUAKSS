@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,18 +25,22 @@ public class Main {
                         System.out.println("\n--- PENDAFTARAN NASABAH BARU ---");
                         System.out.print("Masukkan PIN (6 digit): ");
                         String pinBaru = sc.next();
-                        
-                        System.out.print("Setoran Awal: Rp");
-                        double saldoBaru = sc.nextDouble();
-                        sc.nextLine(); // SAPU HANTU ENTER
+                            try {
+                                System.out.print("Setoran Awal: Rp");
+                                BigDecimal saldoBaru = new BigDecimal(sc.next());
+                                sc.nextLine(); // SAPU HANTU ENTER
 
                         // 1. BUAT OBJEK DAN MEMANGGIL CONSTUCTOR NASABAH
-                        Nasabah nasabahBaru = new Nasabah(pinBaru, saldoBaru);
+                                Nasabah nasabahBaru = new Nasabah(pinBaru, saldoBaru);
                         
                         // 2. MASUKIN KE GUDANG
-                        daftarNasabah.add(nasabahBaru);
+                                daftarNasabah.add(nasabahBaru);
                         
-                        System.out.println("Berhasil! No Rekening Anda: " + nasabahBaru.getNoRekening());
+                                System.out.println("Berhasil! No Rekening Anda: " + nasabahBaru.getNoRekening());
+                            } catch (Exception e) {
+                                System.out.println("ERROR: " + e.getMessage());
+                            }
+                        
                         break;
                     case 2:
                         // DAFTAR NASABAH
@@ -95,7 +101,7 @@ public class Main {
 
                                 switch (subMenu) {
                                     case 1:
-                                        System.out.println("Saldo anda " + akunAktif.getSaldo());
+                                        System.out.println("Saldo anda Rp:" + akunAktif.getSaldo().setScale(2, RoundingMode.HALF_UP));
                                         break;
 
                                     case 2:
@@ -114,7 +120,7 @@ public class Main {
                                                 break;
                                             }else{
                                                 System.out.println("Jumlah Transfer : Rp");
-                                            int jumlah = sc.nextInt();
+                                            BigDecimal jumlah = new BigDecimal(sc.next());
 
                                             try {
                                                 akunAktif.transfer(penerima, jumlah);
