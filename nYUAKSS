@@ -1,11 +1,11 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Nasabah> daftarNasabah = new ArrayList<>();
+        Bank bankYoBank = new Bank();
         Scanner sc = new Scanner(System.in);
         boolean running = true;
         while (running) {
@@ -23,18 +23,21 @@ public class Main {
                     case 1:
                         // LOGIKA DAFTAR
                         System.out.println("\n--- PENDAFTARAN NASABAH BARU ---");
+                        System.out.println("Masukan NAMA LENGKAP");
+                        String namaBaru = sc.nextLine();
                         System.out.print("Masukkan PIN (6 digit): ");
                         String pinBaru = sc.next();
+                        Nasabah.validasiFormat(pinBaru);
                             try {
                                 System.out.print("Setoran Awal: Rp");
                                 BigDecimal saldoBaru = new BigDecimal(sc.next());
                                 sc.nextLine(); // SAPU HANTU ENTER
 
                         // 1. BUAT OBJEK DAN MEMANGGIL CONSTUCTOR NASABAH
-                                Nasabah nasabahBaru = new Nasabah(pinBaru, saldoBaru);
+                                Nasabah nasabahBaru = new Nasabah(namaBaru, pinBaru, saldoBaru);
                         
                         // 2. MASUKIN KE GUDANG
-                                daftarNasabah.add(nasabahBaru);
+                                bankYoBank.tambahNasabah(nasabahBaru);
                         
                                 System.out.println("Berhasil! No Rekening Anda: " + nasabahBaru.getNoRekening());
                             } catch (Exception e) {
@@ -45,11 +48,13 @@ public class Main {
                     case 2:
                         // DAFTAR NASABAH
                         System.out.println("\n--- DAFTAR NASABAH ---");
-                        if (daftarNasabah.isEmpty()) {
-                            System.out.println("Bank kosong");
-                        }
-                        for (Nasabah n : daftarNasabah) {
-                            System.out.println(n.toString());
+                        Collection<Nasabah> daftar = bankYoBank.getSemuaNasabah();
+                        if (daftar.isEmpty()) {
+                            System.out.println("Bank Kosong");
+                        }else{
+                            for (Nasabah akun : daftar) {
+                                System.out.println(akun);
+                            }
                         }
                         break;
                     case 3:
@@ -57,15 +62,8 @@ public class Main {
                         // INPUT NO REK
                             System.out.println("Masukan No Rekening");
                             String inputRekening = sc.next();
-                            Nasabah akunAktif = null;
                         // bisa buat method baru lgi nanti tinggal panggil akunAktif = findNasasbah(daftarNasabah, inputRekening)
-                            for (Nasabah n : daftarNasabah) {
-                                if (n.getNoRekening().equals(inputRekening)) {
-                                    akunAktif = n;
-                                    break;
-                                }
-                            }
-
+                            Nasabah akunAktif = bankYoBank.cariNasabah(inputRekening);
                             if (akunAktif == null) {
                                 System.out.println("Rekening tidak terdaftar");
                                 continue;
@@ -107,14 +105,8 @@ public class Main {
                                     case 2:
                                         System.out.println("Masukan No Rekening Tujuan :");
                                         String rekTujuan = sc.next();
-                                        Nasabah penerima = null;
+                                        Nasabah penerima = bankYoBank.cariNasabah(rekTujuan);
 
-                                        for (Nasabah n : daftarNasabah) {
-                                            if (n.getNoRekening().equals(rekTujuan)) {
-                                                penerima = n;
-                                                break;
-                                            }
-                                        }
                                             if (penerima == null) {
                                                 System.out.println("ERROR Rekening tujuan tidak terdaftar");
                                                 break;
