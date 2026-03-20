@@ -40,6 +40,17 @@ public class Bank {
         
         mapNasabah.put(akun.getNoRekening(), akun);
     }
+    
+    public void loadData(){
+        List<Nasabah> fromDB = nasabahDAO.loadAll();
+        for (Nasabah n : fromDB ){
+            
+        mapNasabah.put(n.getNoRekening(), n);
+        
+        int angkaRek = Integer.parseInt(n.getNoRekening().substring(4));
+        if(angkaRek >= Nasabah.getCounter()) Nasabah.setCounter(angkaRek + 1)
+        } 
+    }
     public Nasabah cariNasabah(String noRek) {
         return mapNasabah.get(noRek);
     }
