@@ -40,7 +40,7 @@ public class NasabahDAO {
     }
 
     public List<Nasabah> loadAll() {
-        List<Nasabah>list = new ArrayList<>():
+        List<Nasabah>list = new ArrayList<>();
         
         String sql = "SELECT * FROM nasabah";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -57,10 +57,7 @@ public class NasabahDAO {
                 rs.getInt("percobaan")
                 );
                 list.add(n);
-
-                int angkaRek = Integer.parseInt(n.getNoRekening().substring(4));
-                if(angkaRek >= Nasabah.getCounter()) Nasabah.setCounter(angkaRek + 1);
-
+                
                 System.out.println("[LOG] Data berhasil dimuat dari Database.");
             }
         } catch (SQLException e) {
