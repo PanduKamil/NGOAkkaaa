@@ -3,10 +3,12 @@ package main.java;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+
 
 public class NasabahDAO {
     DecimalFormat kursIndonesia = new DecimalFormat("###,###.##");
@@ -36,7 +38,9 @@ public class NasabahDAO {
         }
     }
 
-    public void loadFromDatabase() {
+    public List<Nasabah> loadAll() {
+        List<Nasabah>list = new ArrayList<>():
+        
         String sql = "SELECT * FROM nasabah";
         try (Connection conn = DatabaseConnection.getConnection();
             Statement stmt = conn.createStatement();
@@ -44,12 +48,12 @@ public class NasabahDAO {
         ) {
             while (rs.next()) {
                 Nasabah n = new Nasabah(
-                rs.getString("no_rekening"),
-                rs.getString("nama"),
-                rs.getString("pin"),
-                rs.getBigDecimal("saldo"),
-                rs.getBoolean("is_blocked"),
-                rs.getInt("percobaan")
+                list.add.rs.getString("no_rekening"),
+                list.add.rs.getString("nama"),
+                list.add.rs.getString("pin"),
+                list.add.rs.getBigDecimal("saldo"),
+                list.add.rs.getBoolean("is_blocked"),
+                list.add.rs.getInt("percobaan")
                 );
                 mapNasabah.put(n.getNoRekening(), n);
 
@@ -61,6 +65,7 @@ public class NasabahDAO {
         } catch (SQLException e) {
                 System.out.println("[ERROR] Gagal load DB: " + e.getMessage());
         }
+        return list;
     }
     public void updateSaldoDatabase(Nasabah akun) {
     String sql = "UPDATE nasabah SET saldo = ?, is_blocked = ?, percobaan = ? WHERE no_rekening = ?";
