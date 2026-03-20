@@ -9,17 +9,11 @@ import java.math.BigDecimal;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.sql.*;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 
 public class Bank {
     private HashMap<String, Nasabah> mapNasabah;
     private static Bank instance;
-    DecimalFormat kursIndonesia = new DecimalFormat("###,###.##");
-    private NasabahDAO = new NasabahDAO();
-
-    String pattern = "dd-MM-yyyy HH:mm:ss";
-    SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+    private NasabahDAO nasabahDAO = new NasabahDAO();
 
     private Bank(){
         this.mapNasabah = new HashMap<>();
@@ -38,7 +32,13 @@ public class Bank {
     } 
 
     public void tambahNasabah(Nasabah akun) {
+        if (mapNasabah.containsKey(akun.getNoRekening())) {
+        throw new IllegalArgumentException("Nomor Rekening sudah terdaftar");
+        }
+        
         nasabahDAO.tambahNasabah(akun);
+        
+        mapNasabah.put(akun.getNoRekening(), akun);
     }
     public Nasabah cariNasabah(String noRek) {
         return mapNasabah.get(noRek);
