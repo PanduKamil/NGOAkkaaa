@@ -48,7 +48,7 @@ public class Bank {
         mapNasabah.put(n.getNoRekening(), n);
         
         int angkaRek = Integer.parseInt(n.getNoRekening().substring(4));
-        if(angkaRek >= Nasabah.getCounter()) Nasabah.setCounter(angkaRek + 1)
+        if(angkaRek >= Nasabah.getCounter()) Nasabah.setCounter(angkaRek + 1);
         } 
     }
     public Nasabah cariNasabah(String noRek) {
