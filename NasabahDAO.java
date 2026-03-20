@@ -8,7 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class NasabahDAO {
     DecimalFormat kursIndonesia = new DecimalFormat("###,###.##");
@@ -48,14 +49,14 @@ public class NasabahDAO {
         ) {
             while (rs.next()) {
                 Nasabah n = new Nasabah(
-                list.add.rs.getString("no_rekening"),
-                list.add.rs.getString("nama"),
-                list.add.rs.getString("pin"),
-                list.add.rs.getBigDecimal("saldo"),
-                list.add.rs.getBoolean("is_blocked"),
-                list.add.rs.getInt("percobaan")
+                rs.getString("no_rekening"),
+                rs.getString("nama"),
+                rs.getString("pin"),
+                rs.getBigDecimal("saldo"),
+                rs.getBoolean("is_blocked"),
+                rs.getInt("percobaan")
                 );
-                mapNasabah.put(n.getNoRekening(), n);
+                list.add(n);
 
                 int angkaRek = Integer.parseInt(n.getNoRekening().substring(4));
                 if(angkaRek >= Nasabah.getCounter()) Nasabah.setCounter(angkaRek + 1);
