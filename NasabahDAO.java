@@ -5,13 +5,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 public class NasabahDAO {
+    DecimalFormat kursIndonesia = new DecimalFormat("###,###.##");
+    
+    String pattern = "dd-MM-yyyy HH:mm:ss";
+    SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 
     public void tambahNasabah(Nasabah akun) {
-        if (mapNasabah.containsKey(akun.getNoRekening())) {
-            throw new IllegalArgumentException("Nomor Rekening sudah terdaftar");
-        }
+
         String sql = "INSERT INTO nasabah(no_rekening, nama, pin, saldo, is_blocked, percobaan) " +
                      "VALUES(?, ?, ?, ?, ?, ?)";    
         try (Connection conn = DatabaseConnection.getConnection();
@@ -25,7 +29,7 @@ public class NasabahDAO {
                 pstmt.setInt(6, akun.getPercobaan());
 
                 pstmt.executeUpdate();
-                mapNasabah.put(akun.getNoRekening(), akun);
+
                 System.out.println("[LOG] Nasabah berhasil disimpan ke Database.");
         } catch (Exception e) {
             throw new RuntimeException("Gagal simpan ke Database: " + e.getMessage());
