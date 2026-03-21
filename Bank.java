@@ -46,10 +46,37 @@ public class Bank {
         for (Nasabah n : fromDB ){
             
         mapNasabah.put(n.getNoRekening(), n);
-        
+        //Nambah Counter
         int angkaRek = Integer.parseInt(n.getNoRekening().substring(4));
         if(angkaRek >= Nasabah.getCounter()) Nasabah.setCounter(angkaRek + 1);
         } 
+    }
+    public void prosesTransfer(String asal,String tujuan, BigDecimal jumlah){
+        Nasabah pengirim = cariNasabah(rekAsal);
+        Nasabah penerima = cariNasabah(rekTujuan);
+        
+        pengirim.transfer(penerima, jumlah);
+        nasabahDAO.updateSaldoDatabase(penerima);
+        nasabahDAO.updateSaldoDatabase(pengirim);
+        nasabahDAO.catatTransaksi(asal, tujuan, jumlah, "TRANSFER");
+    }
+    public void prosesTariktunai(String noRek, BigDecimal jumlah){
+        Nasabah n = cariNasabah(noRek);
+        
+        n.kurangiSaldo(jumlah);
+        
+        nasabahDAO.updateSaldoDatabase(noRek, "ATM", jumlah, "TARIK TUNAI")
+    }
+    public void prosesSetorTunai(String noRek, BigDecimal jumlah){
+        Nasabah n = cariNasabah(noRek);
+        
+        n.tambahSaldo(jumlah);
+        
+        nasabahDAO.updateSaldoDatabase("CASH", noRek, jumlah, "SETOR TUNAI")
+    }
+
+    public List<String> lihatRiwayat(String noRek){
+        retun nasabahDAO.getMutasiList(noRek);
     }
     public Nasabah cariNasabah(String noRek) {
         return mapNasabah.get(noRek);
