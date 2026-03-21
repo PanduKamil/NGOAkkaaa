@@ -57,7 +57,7 @@ public class NasabahDAO {
                 rs.getInt("percobaan")
                 );
                 list.add(n);
-                
+
                 System.out.println("[LOG] Data berhasil dimuat dari Database.");
             }
         } catch (SQLException e) {
@@ -124,6 +124,7 @@ public class NasabahDAO {
                             }else if (tujuan.equals(noRekAktif)) {
                                 listHistory.add("[" + tanggal + "] MASUK <- Dari: " + asal + " | +Rp" + saldoFormat );
                             }
+                            list.add(new Transaksi(asal, tujuan, jumlah, jenis, tanggal))
                     } 
                     
                     }
